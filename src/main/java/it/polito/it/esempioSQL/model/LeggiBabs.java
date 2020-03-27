@@ -2,6 +2,7 @@ package it.polito.it.esempioSQL.model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,11 +26,18 @@ public class LeggiBabs {
 		//a my sql, la prima che risponde prende ilcontrollo della connessione e apre la connessione, passandogli i parametri
 			Connection conn = DriverManager.getConnection(jdbcUrl); //Driver manager è una classe della libreria java sql, connection che pero
 		                                                            //e' un interfaccia. In tutte le operazioni di input output c'e un exception, per questo in blocco try catch
-			Statement st = conn.createStatement(); //chiedo alla connessione di crearmi una "navetta"
+			//Statement st = conn.createStatement(); //chiedo alla connessione di crearmi una "navetta"
 			
-			String sql = "SELECT NAME FROM station"; //incollo un interrogazione che sono sicuro sia giusta dal punto di vista sintattico 
+			//anche se in questo caso non stiamo facendo una query parametrica, possiamo usare il prepared statement
+			//la query va anticipata alla creazione dello statement
 			
-			ResultSet res = st.executeQuery(sql); //vai al database e digli di eseguire questa istruzione (Risultato creato sempre tramite factory) Questo contiene il modo per accedere al risultao
+			//String sql = "SELECT name FROM station"; //incollo un interrogazione che sono sicuro sia giusta dal punto di vista sintattico 
+			String sql = "SELECT name FROM station WHERE landmark= ?"; //questa è una definizione parametrica
+			PreparedStatement st= conn.prepareStatement(sql);
+			
+			st.setString(1, "Palo Alto");
+			//ResultSet res = st.executeQuery(sql); //vai al database e digli di eseguire questa istruzione (Risultato creato sempre tramite factory) Questo contiene il modo per accedere al risultao
+			ResultSet res = st.executeQuery();
 			
 			//questo ciclo while funzionerebbe anche se la query non restituisse alcun risultato, passa dalla riga prima della prima alla riga dopo l'ultima
 			while (res.next()) { //finche è vero res.next, il cursore è su una riga che esiste
