@@ -1,25 +1,32 @@
 package it.polito.it.esempioSQL.model;
+import java.util.List;
 
-import java.sql.Connection;
+import it.polito.tdp.esempioSQL.db.BabsDAO;
+
+
+//QUesti import non servono piu
+/*import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.Statement;*/
 
 //In questa classe vogliamo leggere i dati come database
 
 public class LeggiBabs {
 
 	public void run() {
-		String jdbcUrl = "jdbc:mysql://localhost/babs?user=root&password=Vale1998Giammy"; //stringa di connessione che identifica in modo preciso cosa vogliamo leggere
+		
+		//TUTTO QUESTO SOTTO L'HO SPOSTATO NEL DAO
+		/*String jdbcUrl = "jdbc:mysql://localhost/babs?user=root&password=Vale1998Giammy"; //stringa di connessione che identifica in modo preciso cosa vogliamo leggere
 		
 		
 		/* Questo si chiama pattern di programmazione di tipo FACTORY, abbiamo creato un oggetto di una classe senza sapere come si chiama questa
 		 * classe, quindi non potevo usare new, perche avrei dovuto dire qual era la classe. 
 		 * Uso un metodo fornito da un'altra classe che internamente fara la new e conoscera il tipo di classe effettivo.
 		 * Questo pattern e' molto utilizzato
-		 */
+		 //
 		
 		try {
 		//Driver manager analizza la string, va a vedere quali classi implementano la collection e chiede a tutte le classi se qualcuna puo rispondere
@@ -53,8 +60,26 @@ public class LeggiBabs {
 		
 		} catch (SQLException e) {                            
 			e.printStackTrace();
-			}
+			}*/
+		
+		
+		BabsDAO dao = new BabsDAO();	
+		List <Station> tutte = dao.listStation(); //cosi restituisco un elenco di oggetti
+		
+		for (Station s : tutte) {
+			System.out.println(s.getName());
 		}
+		
+		System.out.println("____");
+
+		//QUI l'ALTRO METODO
+		List <Station> paloAlto = dao.listStationByLandmark("Palo ALto"); //qui specifico che voglio le stazioni di palo alto
+		for (Station s : paloAlto) {
+			System.out.println(s.getName());
+		}
+		
+		
+	}
 		
 	// Creo un'istanza di me stesso e la eseguo
 	
